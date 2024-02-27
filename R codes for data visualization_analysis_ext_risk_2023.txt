@@ -1,0 +1,291 @@
+R codes for data visualization
+######################Chordiagram#########################
+library(ggraph)
+library(igraph)
+library(tidyverse)
+library(RColorBrewer)
+ 
+library(tidyverse)
+library(viridis)
+library(patchwork)
+library(hrbrthemes)
+library(circlize)
+library(chorddiag)
+ 
+
+
+
+
+##############Chordiagram for IUCN category B############################
+#####################################################################
+ 
+data_redlist <- read.table("c:/Users/PC/Desktop/UDLA/Artículos 2021_2022/Conservation status/Red_list_categoryB.txt", header=TRUE)
+data_redlist
+# short names
+rownames(data_redlist) <- c("Achariaceae", "Actinidiaceae", "Anacardiaceae", "Annonaceae","Chrysobalanaceae",
+"Dichapetalaceae", "Elaeocarpaceae","Erythroxylaceae","Fabaceae","Lauraceae","Magnoliaceae","Malpighiaceae",
+"Malvaceae","Melastomataceae","Moraceae","Myrtaceae","Ochnaceae","Olacaceae","Pentaphylacaceae","Primulaceae","Proteaceae",
+"Rhamnaceae","Rubiaceae","Rutaceae","Salicaceae","Sapotaceae","Thymelaeaceae","Urticaceae","Vochysiaceae")Te Chao2 richness estimator predicts at least twice as
+many taxa present
+colnames(data_redlist) <- c("EN", "CR", "VU")
+ 
+df = data.frame(from = rep(rownames(data_redlist), ncol(data_redlist)),
+            	to = rep(colnames(data_redlist), nrow(data_redlist)),
+            	value = as.vector(data_redlist))
+df
+times =
+  stringsAsFactors = FALSE
+ 
+grid.col=c(EN= "orange", CR = "red", VU = "yellow")
+col_fun = colorRamp2(c(-2,1,4), c("orange", "#FFEEEE", "#ff2b00"), transparency = 0.6)
+col_fun
+ 
+chordDiagram(df, annotationTrack = "grid", preAllocateTracks = 1, grid.col = grid.col, col=col_fun)
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(-0.2, 0.5))
+  circos.axis(h = "top", labels.cex = 0.5, major.tick.percentage = NULL, sector.index = sector.name, track.index = 2)
+}, bg.border = NA)
+ 
+chordDiagram(df)
+chordDiagram(df, grid.col = grid.col, col = col_fun)
+chordDiagram(df, grid.col = grid.col, annotationTrack = c("name", "grid"),
+             annotationTrackHeight = c(0.03, 0.01))
+ 
+#############Chordiagram for IUCN category D############################
+#####################################################################
+data_redlist_D <- read.table("c:/Users/PC/Desktop/UDLA/Artículos 2021_2022/Conservation status/Red_list_categoryD.txt", header=TRUE)
+data_redlist_D
+ 
+# short names
+rownames(data_redlist_D) <- c("Achariaceae", "Actinidiaceae", "Anacardiaceae", "Annonaceae","Chrysobalanaceae",                       	"Dichapetalaceae","Elaeocarpaceae","Erythroxylaceae","Fabaceae","Lauraceae","Magnoliaceae","Malpighiaceae,                      	"Malvaceae","Melastomataceae","Moraceae","Myrtaceae","Ochnaceae","Olacaceae","Pentaphylacaceae","Primulaceae","Proteaceae",                    "Rhamnaceae","Rubiaceae","Rutaceae","Salicaceae","Sapotaceae","Thymelaeaceae","Urticaceae","Vochysiaceae")
+colnames(data_redlist_D) <- c("CR", "EN")
+ 
+df_categoryD = data.frame(from = rep(rownames(data_redlist_D), times = ncol(data_redlist_D)),
+            	to = rep(colnames(data_redlist_D), each = nrow(data_redlist_D)),
+            	value = as.vector(data_redlist_D),
+                stringsAsFactors = FALSE)
+ 
+grid.col2=c(CR = "red", EN= "orange")
+col_fun2 = colorRamp2(c(-1,1), c("#FFEEEE", "#ff2b00"), transparency = 0.5)
+ 
+chordDiagram(df_categoryD, annotationTrack = "grid", preAllocateTracks = 1, grid.col = grid.col2, col=col_fun2)
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(-0.2, 0.5))
+  circos.axis(h = "top", labels.cex = 0.5, major.tick.length = mm_y(2), sector.index = sector.name, track.index = 2)
+}, bg.border = NA)
+ 
+geography <- read.table("c:/Users/PC/Desktop/Artículos 2021/Conservation status/EEO_AOO.txt", dec = ",", header=TRUE)
+# short names
+rownames(data_redlist_D) <- c("Achariaceae", "Actinidiaceae", "Anacardiaceae", "Annonaceae","Chrysobalanaceae", "Dichapetalaceae", "Elaeocarpaceae","Erythroxylaceae","Fabaceae","Lauraceae","Magnoliaceae","Malpighiaceae,                             "Malvaceae","Melastomataceae","Moraceae","Myrtaceae","Ochnaceae","Olacaceae","Pentaphylacaceae","Primulaceae","Proteaceae",                    "Rhamnaceae","Rubiaceae","Rutaceae","Salicaceae","Sapotaceae","Thymelaeaceae","Urticaceae","Vochysiaceae")
+colnames(data_redlist_D) <- c("CR", "EN")
+ 
+df_categoryD = data.frame(from = rep(rownames(data_redlist_D), times = ncol(data_redlist_D)),
+                          to = rep(colnames(data_redlist_D), each = nrow(data_redlist_D)),
+                          value = as.vector(data_redlist_D),
+                          stringsAsFactors = FALSE)
+grid.col3=c(CR = "red", EN= "orange")
+col_fun3 = colorRamp2(c(0,1), c("#FFEEEE", "#ff2b00"), transparency = 0.5)
+ 
+chordDiagram(df_categoryD, annotationTrack = "grid", preAllocateTracks = 1, grid.col = grid.col3, col=col_fun3)
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(-0.2, 0.5))
+  circos.axis(h = "top", labels.cex = 0.5, major.tick.length = mm_y(2), sector.index = sector.name, track.index = 2)
+}, bg.border = NA)
+ 
+####################Plotting extinction risk and geographic range (EEO, AOO)########
+##########################################################################
+ 
+extinc_risk <- read.table("c:/Users/PC/Desktop/UDLA/Artículos 2021_2022/Conservation status/Extin_risk.txt", dec=",",header=TRUE)
+ 
+extinc_traits <- read.table("c:/Users/PC/Desktop/UDLA/Artículos 2021_2022/Conservation status/Traits_final.txt", dec=",",header=TRUE)
+ 
+ggplot1<-ggplot(extinc_risk, aes(x=EOO_km2, y=Extinction_risk, size=Extinction_risk*2,color="lightred"))+
+  geom_smooth(method=lm, formula=y~poly(x,2) , color="blue", fill="#69b3a2", se=TRUE) +
+  xlab("Geographic range (km)")+
+  ylab("Extinction risk")+
+  geom_text(x=100, y=0.35, label="R2=0.10")+
+  geom_text(x=100, y=0.20, label="p=0.04")+
+  theme(text = element_text(size=18),
+    	axis.text.x = element_text(size=16, hjust=1), axis.text.y = element_text(size=16, hjust=1))+
+theme(legend.position = "none")+
+  scale_x_continuous(trans='log10')+
+geom_point()
+ggplot1
+p1 <- ggMarginal(ggplot1, type="histogram",
+             	fill=4)
+ 
+gam_ext=gam(log(EOO_km2)~Extinction_risk, data=extinc_risk, method="ML", family=gaussian,
+        	fit=TRUE)
+summary(gam_ext)
+anova(gam_ext)
+ 
+lm_ext=lm(Extinction_risk~log(EOO_km2)^2, data=extinc_risk)
+summary(lm_ext)
+ 
+extinc_risk$logEOO<-log(extinc_risk$EOO_km2)
+ 
+extinc_risk$logEOO_quadratic<- extinc_risk$logEOO ^ 2
+extinc_risk$logEOO_cubic<- extinc_risk$logEOO ^ 3
+ 
+lm.poly <- lm(Extinction_risk ~logEOO_quadratic, data = extinc_risk)
+lm.poly3 <- lm(Extinction_risk ~logEOO_cubic, data = extinc_risk)
+summary(lm.poly)
+summary(lm.poly3)
+ggplot(extinc_risk, aes(x=Extinction_risk, group=Range_size, fill=Range_size))+
+  geom_density(alpha=0.7,adjust=0.4, kernel="gaussian")+
+  xlab("Extinction risk")+
+  ylab("Density")+
+  theme(text = element_text(size=18),
+    	axis.text.x = element_text(size=16, hjust=1), axis.text.y = element_text(size=16, hjust=1))
+ 
+ggplot(extinc_risk, aes(x=Extinction_risk, group=Range_size, fill=Range_size)) +
+  geom_density(alpha=0.7,adjust=1, kernel="gaussian")+
+  xlab("Extinction risk")+
+  ylab("Density")+
+  theme(text = element_text(size=18),
+    	axis.text.x = element_text(size=16, hjust=1), axis.text.y = element_text(size=16, hjust=1))
+ 
+ggplot(extinc_risk, aes(x=Extinction_risk, group=Life_form, fill=Life_form)) +
+  geom_density(alpha=0.7,adjust=1.5, kernel="gaussian")+
+  xlab("Extinction risk")+
+  ylab("Density")+
+  annotate("text", x=0.02, y=4, label="a)", size=8)+
+  theme(text = element_text(size=18),
+    	axis.text.x = element_text(size=16, hjust=1), axis.text.y = element_text(size=16, hjust=1))
+ 
+ggplot(extinc_risk, aes(x=Extinction_risk, group=Fruit_size, fill=Fruit_size)) +
+  geom_density(alpha=0.7,adjust=1, kernel="gaussian")+
+  xlab("Extinction risk")+
+  ylab("Density")+
+  annotate("text", x=0.02, y=3.4, label="b)", size=8)+
+  theme(text = element_text(size=18),
+    	axis.text.x = element_text(size=16, hjust=1), axis.text.y = element_text(size=16, hjust=1))
+ 
+
+
+R codes for Generalized Linear Mixed Models Analysis (GLMM)
+########GLMM analysis#####################################
+##########################################################
+ 
+library(lmer4)
+library(MuMIn)
+library(glmm)
+extinc_risk<-read.table("c:/Users/PC/Desktop/UDLA/Artículos 2021_2022/Conservation status/Extin_risk.txt", dec=",",header=TRUE)
+extinc_traits<-read.table("c:/Users/PC/Desktop/UDLA/Artículos 2021_2022/Conservation status/Traits_final.txt", dec=",",header=TRUE)
+ 
+###################GLMM models####################################
+###################################################################
+null_model<-lmer(Extinction_risk ~0 +(0+Habitat|Life_form), data= extinc_traits)
+Model_Multi_Full <- glmer(Extinction_risk ~ Maximum_height + Life_form + Fruit_size_length+ Flower_color+ Flower_size_length+Habitat+(1+Habitat|Life_form), family = binomial(link="logit"), data = extinc_traits, control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+Model_Multi_Full1 <- glmer(Extinction_risk ~ Maximum_height + Life_form + Fruit_size_length + Flower_color+(1+Habitat|Life_form), family = binomial(link="logit"),  data = extinc_traits, control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+Model_Multi_Full2 <- glmer(Extinction_risk ~ Maximum_height + Life_form + Fruit_size_length +(1+Habitat|Life_form), family = binomial(link="logit"), data = extinc_traits, control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+Model_Multi_Full3 <- glmer(Extinction_risk ~ Maximum_height + Life_form +(1+Habitat|Life_form), family = binomial, data = extinc_traits, control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+ 
+Model_Multi_Full4 <- glmer(Extinction_risk ~ Maximum_height + Flower_size_length+(1+Habitat|Life_form),
+                           family = binomial,
+                           data = extinc_traits,
+                           control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+ 
+Model_Multi_Full5 <- glmer(Extinction_risk ~ Maximum_height+Life_form + Fruit_size_length +(1+Habitat|Life_form),
+                          family = binomial(link="logit"),
+                          data = extinc_traits,
+                          control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+ 
+Model_Multi_Full6 <- glmer(Extinction_risk ~ Maximum_height+Life_form +Flower_size_length+(1+Habitat|Life_form),
+              	         family = binomial(link="logit"),
+                           data = extinc_traits,
+                           control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+ 
+Model_Multi_Full7 <- glmer(Extinction_risk ~ Maximum_height+Fruit_size_length +(1+Habitat|Life_form),
+                           family = binomial(link="logit"),
+                           data = extinc_traits,
+                           control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+Model_Multi_Full8 <- glmer(Extinction_risk ~ Maximum_height*Life_form+Fruit_size_length + Flower_color+ Flower_size_length+(1+Habitat|Life_form),
+                           family = binomial(link="logit"),
+                           data = extinc_traits,
+                       	control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+ 
+Model_Multi_Full9 <- glmer(Extinction_risk ~ Maximum_height+Fruit_size_length + Flower_color+ Flower_size_length+(1+Habitat|Life_form),
+               	        family = binomial(link="logit"),
+                           data = extinc_traits,
+                           control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+ 
+ 
+Model_Multi_Full10 <- glmer(Extinction_risk ~ Life_form+(1+Habitat|Life_form),
+                                              family = binomial(link="logit"),
+                                              data = extinc_traits,
+                                              control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+Model_Multi_Full11 <- glmer(Extinction_risk ~ Fruit_size_length+(1+Habitat|Life_form),
+                            family = binomial(link="logit"),
+                            data = extinc_traits,
+                            control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=2e5)))
+ 
+Model_Multi_Full12 <- lmer(Extinction_risk ~ Maximum_height+Fruit_size_length + Flower_color+ Flower_size_length+Habitat+(0+Habitat|Life_form),
+                           data = extinc_traits)
+Model_Multi_Full13 <- lmer(Extinction_risk ~ Life_form+Maximum_height+Fruit_size_length + Flower_color+ Flower_size_length+(0+Habitat|Life_form),
+                           data = extinc_traits)
+Model_Multi_Full14 <- lmer(Extinction_risk ~ Life_form+Fruit_size_length + Flower_color+ Flower_size_length+(0+Habitat|Life_form),
+                           data = extinc_traits)
+Model_Multi_Full15 <- lmer(Extinction_risk ~ Life_form+Fruit_size_length + Flower_color+(0+Habitat|Life_form),
+                           data = extinc_traits)
+Model_Multi_Full16 <- lmer(Extinction_risk ~ Life_form+Fruit_size_length +(0+Habitat|Life_form),
+                           data = extinc_traits)
+ 
+Model_Multi_Full17 <- lmer(Extinction_risk ~ Life_form+Maximum_height +(0+Habitat|Life_form),
+                           data = extinc_traits)
+ 
+ 
+summary(null_model)
+summary(Model_Multi_Full)
+summary(Model_Multi_Full1)
+summary(Model_Multi_Full2)
+summary(Model_Multi_Full3)
+summary(Model_Multi_Full4)
+summary(Model_Multi_Full5)
+summary(Model_Multi_Full6)
+summary(Model_Multi_Full7)
+summary(Model_Multi_Full8)
+summary(Model_Multi_Full9)
+summary(Model_Multi_Full10)
+summary(Model_Multi_Full11)
+summary(Model_Multi_Full12)
+summary(Model_Multi_Full13)
+summary(Model_Multi_Full14)
+summary(Model_Multi_Full15)
+summary(Model_Multi_Full16)
+summary(Model_Multi_Full17)
+ 
+##############################Model selection##############################
+#########################################################################
+ 
+listaic=AIC(Model_Multi_Full, Model_Multi_Full1, Model_Multi_Full2, Model_Multi_Full3, Model_Multi_Full4, Model_Multi_Full5, Model_Multi_Full6, Model_Multi_Full7, Model_Multi_Full8, Model_Multi_Full9, Model_Multi_Full10, Model_Multi_Full11, Model_Multi_Full12)
+anova_gauss=anova(null_model,Model_Multi_Full12,Model_Multi_Full13, Model_Multi_Full14, Model_Multi_Full15, Model_Multi_Full16, Model_Multi_Full17)
+ 
+model_Sel=model.sel(null_model,Model_Multi_Full, Model_Multi_Full1, Model_Multi_Full2, Model_Multi_Full3,
+            Model_Multi_Full4, Model_Multi_Full5, Model_Multi_Full6, Model_Multi_Full7, Model_Multi_Full8, Model_Multi_Full9, Model_Multi_Full10, Model_Multi_Full11, Model_Multi_Full12, Model_Multi_Full13, Model_Multi_Full14, Model_Multi_Full15, Model_Multi_Full16, Model_Multi_Full17)
+model_Sel2=model.sel(null_model, Model_Multi_Full12,Model_Multi_Full13, Model_Multi_Full14, Model_Multi_Full15, Model_Multi_Full16,
+ 
+#####################Effects plots#########################################
+########################################################################
+ 
+plot(allEffects(Model_Multi_Full4 ))
+plot(allEffects(Model_Multi_Full5 ))
+plot(allEffects(Model_Multi_Full16))
+ 
+effect_ind_var<-allEffects(Model_Multi_Full16)
+effect_ind_var
+extin_ind_effect<- predictorEffect("Life_form",Model_Multi_Full16,
+                                  xlevels=list(Life_form=c(1, 2, 3)))
+extin_indeffect<- predictorEffect("Life_form",Model_Multi_Full16)
+ 
+plot(extin_ind_effect, lines=list(multiline=TRUE),
+     confint=list(style="auto"))
